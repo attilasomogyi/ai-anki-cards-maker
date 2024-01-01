@@ -16,7 +16,3 @@ class Language:
             if language['code'] == language_code:
                 return language['name']
         return None
-
-if __name__ == '__main__':
-    language = Language()
-    language.get_languages()
