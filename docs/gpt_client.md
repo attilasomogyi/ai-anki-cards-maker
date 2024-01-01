@@ -1,6 +1,6 @@
 # GPT Client
 
-[Visit the table of contents](../README.md)
+[Visit the table of contents](README.md)
 
 The active selection is a Python class named `GPTClient` that is used to
 interact with the OpenAI GPT-3 model. This class is part of a larger

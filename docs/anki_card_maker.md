@@ -1,6 +1,6 @@
 # Anki card maker
 
-[Visit the table of contents](../README.md)
+[Visit the table of contents](README.md)
 
 The active selection is a Python class named `AnkiCardMaker`. This class
 is designed to interact with the Anki flashcard software's API.

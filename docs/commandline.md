@@ -1,6 +1,6 @@
 # Commandline
 
-[Visit the table of contents](../README.md)
+[Visit the table of contents](README.md)
 
 The active selection is a Python class named `CommandLine` that is used
 to parse command line arguments for a program. This class is part of a

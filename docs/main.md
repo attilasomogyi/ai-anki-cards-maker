@@ -1,6 +1,6 @@
 # Main
 
-[Visit the table of contents](../README.md)
+[Visit the table of contents](README.md)
 
 The active selection is a Python script that uses the `CommandLine`
 class to parse command line arguments, continuously monitors the

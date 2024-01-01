@@ -1,6 +1,6 @@
 # Languages
 
-[Visit the table of contents](../README.md)
+[Visit the table of contents](README.md)
 
 The active selection is a Python class named `Language`. This class is
 designed to interact with a JSON file named `language_codes.json`, which
