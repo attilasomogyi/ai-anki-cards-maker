@@ -4,9 +4,9 @@
 
 ## Table of contents
 
-- [Anki Card Maker](pages/anki_card_maker.md)
-- [Command Line](pages/commandline.md)
-- [GPT Client](pages/gpt_client.md)
-- [Languages](pages/languages.md)
-- [Main](pages/main.md)
-- [Worker](pages/worker.md)
+- [Anki Card Maker](anki_card_maker.md)
+- [Command Line](commandline.md)
+- [GPT Client](gpt_client.md)
+- [Languages](languages.md)
+- [Main](main.md)
+- [Worker](worker.md)
