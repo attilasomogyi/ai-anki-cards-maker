@@ -10,7 +10,7 @@ Create Anki cards with AI
 
 ## Documentation
 
-Read the [Documentation](docs/README.md).
+Read the [Documentation](docs/README.rst).
 
 ## Support
 
