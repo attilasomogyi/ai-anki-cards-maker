@@ -1,2 +1,3 @@
-# ai-anki-cards-maker
+# Anki card maker
+
 Create Anki cards with AI
