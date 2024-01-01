@@ -1,3 +1,9 @@
 openai
 pyperclip
 json-repair
+flake8
+pylint
+bandit
+mypy
+pyright
+ruff
