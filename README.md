@@ -18,7 +18,7 @@ Read the [Support](SUPPORT.md).
 
 ## Security
 
-Read the security.
+Read the [Security](SECURITY.md).
 
 ## Contributing
 
