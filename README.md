@@ -14,7 +14,7 @@ Read the [Documentation](docs/README.md).
 
 ## Support
 
-Read the Support.
+Read the [Support](SUPPORT.md).
 
 ## Security
 
