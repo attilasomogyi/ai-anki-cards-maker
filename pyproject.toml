@@ -1,0 +1,34 @@
+[project]
+authors = [{ name = "Attila Zsolt Somogyi" }]
+name = "ankicardmaker"
+version = "1.0.0"
+description = "An Anki card maker for the OpenAI API."
+dependencies = ["openai", "pyperclip", "json-repair"]
+requires-python = ">= 3.11"
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["anki", "ankicardmaker", "ankicard"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/attilasomogyi/ankicardmaker"
+"Documentation" = "https://github.com/attilasomogyi/ankicardmaker"
+"Repository" = "https://github.com/attilasomogyi/ankicardmaker"
+"Bug Tracker" = "https://github.com/attilasomogyi/ankicardmaker/issues"
+"Changelog" = "https://github.com/attilasomogyi/ankicardmaker/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+ankicardmaker = "ankicardmaker:main"
+
+[project.entry-points."ankicardmaker.main"]
+ankicardmaker = "ankicardmaker:main"
