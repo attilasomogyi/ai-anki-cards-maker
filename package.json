@@ -1,0 +1,15 @@
+{
+  "name": "ankicardmaker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:attilasomogyi/ankicardmaker.git",
+  "author": "Attila Zsolt Somogyi",
+  "license": "MIT",
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}
