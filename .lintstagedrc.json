@@ -1,5 +1,3 @@
 {
-  "lint-staged": {
-    "*.py": ["plylint", "black", "flake8", "mypy", "pyright", "bandit", "ruff"]
-  }
+  "*.py": ["plylint", "black", "flake8", "mypy", "pyright", "bandit", "ruff"]
 }
