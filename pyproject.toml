@@ -2,7 +2,7 @@
 authors = [{ name = "Attila Zsolt Somogyi" }]
 name = "ankicardmaker"
 version = "1.0.0"
-description = "An Anki card maker for the OpenAI API."
+description = "Anki card maker with AI"
 dependencies = ["openai", "pyperclip", "json-repair"]
 requires-python = ">= 3.11"
 readme = "README.md"
