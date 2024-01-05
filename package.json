@@ -6,6 +6,7 @@
   "author": "Attila Zsolt Somogyi",
   "license": "MIT",
   "devDependencies": {
+    "code-review-gpt": "^0.1.5",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0"
   },
