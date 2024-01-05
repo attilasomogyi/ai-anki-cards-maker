@@ -1,7 +1,7 @@
 [project]
 authors = [{ name = "Attila Zsolt Somogyi" }]
 name = "ankicardmaker"
-version = "1.0.0"
+dynamic = ["version"]
 description = "Anki card maker with AI"
 dependencies = ["openai", "pyperclip", "json-repair"]
 requires-python = ">= 3.11"
@@ -27,8 +27,11 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"ankicardmaker.data" = ["*.json"]
+
 [project.scripts]
-ankicardmaker = "ankicardmaker:main"
+ankicardmaker = "ankicardmaker.main:main"
 
 [project.entry-points."ankicardmaker.main"]
-ankicardmaker = "ankicardmaker:main"
+ankicardmaker = "ankicardmaker.main:main"

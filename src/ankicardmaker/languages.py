@@ -1,13 +1,15 @@
 """Module for handling languages and their codes."""
 
 from json import load
+from os import path
 
 
 class Language:
     """Class providing a function to handle languages and their codes."""
 
     def __init__(self):
-        with open("language_codes.json", encoding="utf-8") as language_codes_json_file:
+        data_path = path.join(path.dirname(__file__), "data", "language_codes.json")
+        with open(data_path, "r", encoding="utf-8") as language_codes_json_file:
             self.languages = load(language_codes_json_file)
 
     def get_language_codes(self):
