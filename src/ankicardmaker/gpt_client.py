@@ -30,13 +30,27 @@ class GPTClient:
         if not prompt:
             raise ValueError("Prompt is required")
 
-        result = self.client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
-            temperature=0.1,
-            response_format={"type": "json_object"},
-            messages=[{"role": "user", "content": prompt}],
-        )
+        if not isinstance(prompt, str):
+            raise TypeError("Prompt must be a string")
+
+        try:
+            result = self.client.chat.completions.create(
+                model="gpt-3.5-turbo-1106",
+                temperature=0.1,
+                response_format={"type": "json_object"},
+                messages=[{"role": "user", "content": prompt}],
+            )
+        except Exception as error:
+            raise RuntimeError("Failed to get response from GPT API") from error
+
+        if not result or not result.choices:
+            raise ValueError("No response received from GPT API")
 
         gpt_response = str(result.choices[0].message.content)
-        gpt_response = loads(gpt_response)
+
+        try:
+            gpt_response = loads(gpt_response)
+        except Exception as error:
+            raise ValueError("Failed to parse response from GPT API") from error
+
         return gpt_response
