@@ -1,3 +1,11 @@
 {
-  "*.py": ["pylint", "black", "flake8", "mypy", "pyright", "bandit", "ruff"]
+  "*.py": [
+    "pylint",
+    "black",
+    "flake8",
+    "mypy",
+    "pyright",
+    "bandit -c pyproject.toml",
+    "ruff"
+  ]
 }

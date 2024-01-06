@@ -3,7 +3,7 @@ authors = [{ name = "Attila Zsolt Somogyi" }]
 name = "ankicardmaker"
 dynamic = ["version"]
 description = "Anki card maker with AI"
-dependencies = ["openai", "pyperclip", "json-repair"]
+dependencies = ["openai", "pyperclip", "json-repair", "jinja2"]
 requires-python = ">= 3.11"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -35,3 +35,15 @@ ankicardmaker = "ankicardmaker.main:main"
 
 [project.entry-points."ankicardmaker.main"]
 ankicardmaker = "ankicardmaker.main:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["./src"]
+testpaths = ["./tests"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = ["./tests"]
+tests = ["B201", "B301"]
+skips = ["B101", "B601"]
