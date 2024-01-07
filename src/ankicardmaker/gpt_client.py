@@ -13,16 +13,20 @@ class GPTClient:
     def __init__(self):
         self.client = OpenAI()
         self.language = Language()
+        self.prompt_template = self.get_prompt_template()
+
+    def get_prompt_template(self):
+        """Get prompt template."""
         template_path = path.join(path.dirname(__file__), "data")
         environment = Environment(
             loader=FileSystemLoader(template_path), autoescape=True
         )
-        self.template = environment.get_template("prompt.jinja")
+        return environment.get_template("prompt.jinja")
 
     def create_prompt(self, text, language_code):
         """Create a prompt."""
         language_name = self.language.get_language_name(language_code)
-        prompt = self.template.render(text=text, language_name=language_name)
+        prompt = self.prompt_template.render(text=text, language_name=language_name)
         return prompt
 
     def get_gpt_response(self, prompt):

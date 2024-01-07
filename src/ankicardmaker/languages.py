@@ -8,16 +8,21 @@ class Language:
     """Class providing a function to handle languages and their codes."""
 
     def __init__(self):
+        self.languages = self.get_languages()
+
+    def get_languages(self):
+        """Get languages."""
         data_path = path.join(path.dirname(__file__), "data", "language_codes.json")
         if not path.exists(data_path):
             raise FileNotFoundError(f"{data_path} does not exist.")
         with open(data_path, "r", encoding="utf-8") as language_codes_json_file:
             try:
-                self.languages = load(language_codes_json_file)
+                languages = load(language_codes_json_file)
             except JSONDecodeError as error:
                 raise ValueError(f"{data_path} is not a valid JSON file.") from error
-            if not self.languages:
+            if not languages:
                 raise ValueError(f"{data_path} is empty.")
+        return languages
 
     def get_language_codes(self):
         """Get language codes."""
