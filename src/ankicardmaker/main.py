@@ -15,7 +15,10 @@ def main():
         while True:
             clipboard = str(waitForNewPaste()).rstrip()
             print(clipboard)
-            run(worker(clipboard, args.deck, args.language_code))
+            try:
+                run(worker(clipboard, args.deck, args.language_code))
+            except ValueError as error:
+                print(f"An error occurred: {error}")
     except KeyboardInterrupt:
         print("Exiting...")
         sys.exit(0)
