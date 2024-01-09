@@ -20,18 +20,20 @@ class AnkiCardMaker:
             raise ValueError("ANKI_CONNECT_API_KEY environment variable is not set")
         return anki_connect_api_key
 
-    def create_request(self, action, **params):
-        """Create a request object."""
+    def create_request_payload(self, operation, **parameters):
+        """Create a request payload."""
         return {
-            "action": action,
-            "params": params,
+            "action": operation,
+            "params": parameters,
             "version": 6,
             "key": self.anki_connect_api_key,
         }
 
-    def invoke(self, action, **params):
+    def execute_operation(self, operation, **parameters):
         """Invoke an action."""
-        request_json = dumps(self.create_request(action, **params)).encode("utf-8")
+        request_json = dumps(
+            self.create_request_payload(operation, **parameters)
+        ).encode("utf-8")
         request = Request(self.anki_connect_url, request_json)
         with contextlib.closing(urlopen(request)) as response:
             response = load(response)

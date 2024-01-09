@@ -36,6 +36,6 @@ async def worker(clipboard, deck_name, language_code):
             note = anki.create_note(
                 deck_name, front=card["question"], back=card["answer"]
             )
-            anki.invoke("addNote", **note)
+            anki.execute_operation("addNote", **note)
         except ValueError as error:
             raise ValueError(f"Failed to add note: {error}") from error
