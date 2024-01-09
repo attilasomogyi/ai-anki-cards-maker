@@ -37,13 +37,8 @@ class AnkiCardMaker:
         request = Request(self.anki_connect_url, request_json)
         with contextlib.closing(urlopen(request)) as response:
             response = load(response)
-        if len(response) != 2:
-            raise ValueError("response has an unexpected number of fields")
-        if "error" not in response:
-            raise ValueError("response is missing required error field")
-        if "result" not in response:
-            raise ValueError("response is missing required result field")
-        return response["result"]
+            if response["error"] is not None:
+                raise ValueError(response["error"].capitalize())
 
     def create_note(self, deck_name, front, back, allow_duplicates=False):
         """Create a note."""
