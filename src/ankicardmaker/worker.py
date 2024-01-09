@@ -33,7 +33,7 @@ async def worker(clipboard, deck_name, language_code):
             raise ValueError("Invalid flashcard.")
 
         try:
-            note = anki.make_note(
+            note = anki.create_note(
                 deck_name, front=card["question"], back=card["answer"]
             )
             anki.invoke("addNote", **note)
