@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/attilasomogyi/ankicardmaker/main/src/ankicardmaker/data/ankicardmaker_config_file_schema.json",
+  "title": "Anki card maker config file schema",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "properties": {
+    "anki_connect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "openai": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0
+        }
+      }
+    },
+    "ankicardmaker": {
+      "type": "object",
+      "properties": {
+        "deck_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "language": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 2
+        }
+      }
+    }
+  }
+}

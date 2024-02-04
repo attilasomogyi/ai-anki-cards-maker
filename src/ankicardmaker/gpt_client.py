@@ -5,15 +5,48 @@ from openai import OpenAI
 from json_repair import loads
 from jinja2 import Environment, FileSystemLoader
 from ankicardmaker.languages import Language
+from ankicardmaker.config_parser import ConfigParser
 
 
 class GPTClient:
     """Class providing a function to interact with OpenAI API"""
 
     def __init__(self):
-        self.client = OpenAI()
+        self.config_parser = ConfigParser()
+        self.client = self.set_openai()
         self.language = Language()
         self.prompt_template = self.get_prompt_template()
+
+    def get_openai_api_key(self):
+        """Get API key."""
+        config_file = self.config_parser.get_config_file()
+        openai_api_key = config_file["openai"]["api_key"]
+        if not openai_api_key:
+            return None
+        return openai_api_key
+
+    def set_openai(self):
+        """Set OpenAI."""
+        openai_api_key = self.get_openai_api_key()
+        if openai_api_key:
+            return OpenAI(api_key=openai_api_key)
+        return OpenAI()
+
+    def get_model(self):
+        """Get model."""
+        config_file = self.config_parser.get_config_file()
+        openai_model = config_file["openai"]["model"]
+        if openai_model:
+            return openai_model
+        return "gpt-4-0125-preview"
+
+    def get_temperature(self):
+        """Get temperature."""
+        config_file = self.config_parser.get_config_file()
+        openai_temperature = config_file["openai"]["temperature"]
+        if openai_temperature:
+            return openai_temperature
+        return 0.3
 
     def get_prompt_template(self):
         """Get prompt template."""
@@ -39,8 +72,8 @@ class GPTClient:
 
         try:
             result = self.client.chat.completions.create(
-                model="gpt-3.5-turbo-1106",
-                temperature=0.1,
+                model=self.get_model(),
+                temperature=self.get_temperature(),
                 response_format={"type": "json_object"},
                 messages=[{"role": "user", "content": prompt}],
             )

@@ -33,6 +33,15 @@ class CommandLine:
             nargs=1,
             type=str,
         )
+        parser.add_argument(
+            "-f",
+            "--file",
+            dest="file_path",
+            help="File path",
+            required=False,
+            nargs=1,
+            type=str,
+        )
         return parser
 
     def get_parse_args(self):

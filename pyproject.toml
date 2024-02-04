@@ -3,7 +3,14 @@ authors = [{ name = "Attila Zsolt Somogyi" }]
 name = "ankicardmaker"
 dynamic = ["version"]
 description = "Anki card maker with AI"
-dependencies = ["openai", "pyperclip", "json-repair", "jinja2"]
+dependencies = [
+    "openai",
+    "pyperclip",
+    "json-repair",
+    "jinja2",
+    "jsonschema",
+    "jsonschema[format]",
+]
 requires-python = ">= 3.11"
 readme = "README.md"
 license = { file = "LICENSE" }

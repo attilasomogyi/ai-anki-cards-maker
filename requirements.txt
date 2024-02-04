@@ -7,3 +7,4 @@ bandit
 mypy
 pyright
 ruff
+jsonschema
