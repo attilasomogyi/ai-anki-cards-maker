@@ -38,16 +38,9 @@ class ConfigParser:
             case "Linux":
                 config_file_path = self.home_dir / ".config" / self.config_file_name
             case "Darwin":
-                config_file_path = (
-                    self.home_dir
-                    / "Library"
-                    / "Application Support"
-                    / self.config_file_name
-                )
+                config_file_path = self.home_dir / "Library" / "Application Support" / self.config_file_name
             case "Windows":
-                config_file_path = (
-                    self.home_dir / "AppData" / "Roaming" / self.config_file_name
-                )
+                config_file_path = self.home_dir / "AppData" / "Roaming" / self.config_file_name
             case _:
                 raise ValueError("Unsupported operating system")
         if not config_file_path.is_file():
