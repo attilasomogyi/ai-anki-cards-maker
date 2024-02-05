@@ -4,6 +4,7 @@ from json import dumps, load
 import contextlib
 from urllib.request import urlopen, Request
 from os import getenv
+from functools import lru_cache
 from ankicardmaker.config_parser import ConfigParser
 
 
@@ -15,6 +16,7 @@ class AnkiCardMaker:
         self.anki_connect_api_key = self.get_anki_connect_api_key()
         self.anki_connect_url = self.get_anki_connect_url()
 
+    @lru_cache
     def get_anki_connect_api_key(self):
         """Get Anki-Connect API key."""
         anki_connect_api_key = getenv("ANKI_CONNECT_API_KEY")
@@ -25,6 +27,7 @@ class AnkiCardMaker:
                 raise ValueError("ANKI_CONNECT_API_KEY is not set")
         return anki_connect_api_key
 
+    @lru_cache
     def get_anki_connect_url(self):
         """Get Anki-Connect URL."""
         config_file = self.config_parser.get_config_file()

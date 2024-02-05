@@ -8,6 +8,7 @@ class CommandLine:
     """Class providing a function to handle command line arguments."""
 
     def __init__(self):
+        self.language = Language()
         self.parser = self.get_parser_args()
 
     def get_parser_args(self):
@@ -23,13 +24,12 @@ class CommandLine:
             nargs=1,
             type=str,
         )
-        language = Language()
         parser.add_argument(
             "-l",
             "--language",
             dest="language_code",
             help="Language code",
-            choices=language.get_language_codes(),
+            choices=self.language.get_language_codes(),
             nargs=1,
             type=str,
         )

@@ -9,6 +9,11 @@ class Language:
 
     def __init__(self):
         self.languages = self.get_languages()
+        self.language_dictionary = self.get_language_dictionary()
+
+    def get_language_dictionary(self):
+        """Get language dictionary."""
+        return {language["code"]: language["name"] for language in self.languages}
 
     def get_languages(self):
         """Get languages."""
@@ -26,16 +31,10 @@ class Language:
 
     def get_language_codes(self):
         """Get language codes."""
-        language_list = []
-        for language in self.languages:
-            language_list.append(language["code"])
-        return language_list
+        return [language["code"] for language in self.languages]
 
     def get_language_name(self, language_code):
         """Get language name."""
         if not isinstance(language_code, str):
             raise TypeError("language_code must be a string.")
-        for language in self.languages:
-            if language["code"] == language_code:
-                return language["name"]
-        return None
+        return self.language_dictionary.get(language_code, None)

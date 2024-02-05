@@ -13,14 +13,14 @@ class GPTClient:
 
     def __init__(self):
         self.config_parser = ConfigParser()
+        self.config_file = self.config_parser.get_config_file()
         self.client = self.set_openai()
         self.language = Language()
         self.prompt_template = self.get_prompt_template()
 
     def get_openai_api_key(self):
         """Get API key."""
-        config_file = self.config_parser.get_config_file()
-        openai_api_key = config_file["openai"]["api_key"]
+        openai_api_key = self.config_file["openai"]["api_key"]
         if not openai_api_key:
             return None
         return openai_api_key
@@ -34,16 +34,14 @@ class GPTClient:
 
     def get_model(self):
         """Get model."""
-        config_file = self.config_parser.get_config_file()
-        openai_model = config_file["openai"]["model"]
+        openai_model = self.config_file["openai"]["model"]
         if openai_model:
             return openai_model
         return "gpt-4-0125-preview"
 
     def get_temperature(self):
         """Get temperature."""
-        config_file = self.config_parser.get_config_file()
-        openai_temperature = config_file["openai"]["temperature"]
+        openai_temperature = self.config_file["openai"]["temperature"]
         if openai_temperature:
             return openai_temperature
         return 0.3
