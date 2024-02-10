@@ -1,9 +1,9 @@
 """Main module for the Anki Card Maker."""
 
-from asyncio import run
 import sys
+from multiprocessing import Process
+from time import sleep
 from mimetypes import guess_type
-from concurrent.futures import ThreadPoolExecutor
 from pyperclip import waitForNewPaste
 from ankicardmaker.commandline import CommandLine
 from ankicardmaker.worker import worker
@@ -16,7 +16,6 @@ def main():
     args = parser.get_parse_args()
     deck_name = args.deck_name[0]
     language_code = args.language_code[0]
-    executor = ThreadPoolExecutor(max_workers=2)
     if args.file_path:
         file_path = args.file_path[0]
         mime_type = guess_type(file_path)[0]
@@ -28,16 +27,26 @@ def main():
             print(page)
             if page != "":
                 try:
-                    executor.submit(run(worker(page, deck_name, language_code)))
+                    process = Process(
+                        target=worker, args=(page, deck_name, language_code)
+                    )
+                    process.start()
                 except ValueError as error:
                     print(f"An error occurred: {error}")
+                rate_limit_per_minute = 3
+                delay = 60.0 / rate_limit_per_minute
+                sleep(delay)
+
     else:
         try:
             while True:
                 clipboard = str(waitForNewPaste()).rstrip()
                 print(clipboard)
                 try:
-                    executor.submit(run(worker(clipboard, deck_name, language_code)))
+                    process = Process(
+                        target=worker, args=(clipboard, deck_name, language_code)
+                    )
+                    process.start()
                 except ValueError as error:
                     print(f"An error occurred: {error}")
         except KeyboardInterrupt:

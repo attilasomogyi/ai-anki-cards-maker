@@ -15,7 +15,7 @@ def cached_gpt_response(prompt):
     return gpt.get_gpt_response(prompt)
 
 
-async def worker(clipboard, deck_name, language_code):
+def worker(clipboard, deck_name, language_code):
     """Worker function."""
     if not isinstance(clipboard, str) or not clipboard:
         raise TypeError("Clipboard content must be a non-empty string")
