@@ -6,7 +6,7 @@ from time import sleep
 from mimetypes import guess_type
 from pyperclip import waitForNewPaste
 from ankicardmaker.commandline import CommandLine
-from ankicardmaker.worker import worker
+from ankicardmaker.worker import Worker
 from ankicardmaker.pdf import Pdf
 
 
@@ -16,6 +16,7 @@ def main():
     args = parser.get_parse_args()
     deck_name = args.deck_name[0]
     language_code = args.language_code[0]
+    worker = Worker()
     if args.file_path:
         file_path = args.file_path[0]
         mime_type = guess_type(file_path)[0]
@@ -28,7 +29,7 @@ def main():
             if page != "":
                 try:
                     process = Process(
-                        target=worker, args=(page, deck_name, language_code)
+                        target=worker.run, args=(page, deck_name, language_code)
                     )
                     process.start()
                 except ValueError as error:
@@ -44,7 +45,7 @@ def main():
                 print(clipboard)
                 try:
                     process = Process(
-                        target=worker, args=(clipboard, deck_name, language_code)
+                        target=worker.run, args=(clipboard, deck_name, language_code)
                     )
                     process.start()
                 except ValueError as error:
