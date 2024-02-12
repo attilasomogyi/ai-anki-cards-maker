@@ -62,7 +62,6 @@ class AnkiCardMaker:
         """Create a note."""
         if not deck_name or not front or not back:
             raise ValueError("deckName, front and back are required")
-
         note = {
             "note": {
                 "deckName": deck_name,
@@ -71,8 +70,6 @@ class AnkiCardMaker:
                 "tags": ["ai-generated"],
             }
         }
-
         if allow_duplicates:
             note["note"]["options"] = {"allowDuplicate": True}
-
         return note
