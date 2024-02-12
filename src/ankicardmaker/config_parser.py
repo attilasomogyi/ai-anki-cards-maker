@@ -32,31 +32,42 @@ class ConfigParser:
                     f"{self.json_schema_path} is not a valid JSON file."
                 ) from error
 
-    def get_config_file(self):
-        """Get the configuration file."""
+    def get_config_file_path(self):
+        """Get the configuration file path."""
         match system():
             case "Linux":
-                config_file_path = self.home_dir / ".config" / self.config_file_name
+                return self.home_dir / ".config" / self.config_file_name
             case "Darwin":
-                config_file_path = self.home_dir / "Library" / "Application Support" / self.config_file_name
+                return (
+                    self.home_dir
+                    / "Library"
+                    / "Application Support"
+                    / self.config_file_name
+                )
             case "Windows":
-                config_file_path = self.home_dir / "AppData" / "Roaming" / self.config_file_name
+                return self.home_dir / "AppData" / "Roaming" / self.config_file_name
             case _:
                 raise ValueError("Unsupported operating system")
+
+    def get_config_file(self):
+        """Get the configuration file."""
+        config_file_path = self.get_config_file_path()
         if not config_file_path.is_file():
             return None
         try:
             with open(config_file_path, "rb") as config_file:
-                return load(config_file)
+                config_file = load(config_file)
         except IOError as error:
             raise ValueError(f"Could not read {config_file_path}") from error
+        self.validate_config_file(config_file)
+        return config_file
 
-    def validate_config_file(self):
+    def validate_config_file(self, config_file: dict):
         """Validate the configuration file."""
         if not self.json_schema:
             raise ValueError(f"{self.json_schema_path} is empty.")
         validate(
-            instance=self.get_config_file(),
+            instance=config_file,
             schema=self.json_schema,
             format_checker=Draft202012Validator.FORMAT_CHECKER,
         )
