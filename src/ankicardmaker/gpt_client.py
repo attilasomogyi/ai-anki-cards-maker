@@ -1,6 +1,7 @@
 """GPTClient class to interact with OpenAI API"""
 
 from os import path
+from functools import lru_cache
 from openai import OpenAI
 from json_repair import loads
 from jinja2 import Environment, FileSystemLoader
@@ -30,6 +31,7 @@ class GPTClient:
         self.openai_model = self.get_openai_model()
         self.openai_model_temperature = self.get_openai_model_temperature()
 
+    @lru_cache(maxsize=1000)
     def get_openai_api_key(self):
         """Get API key."""
         openai_api_key = self.config_file["openai"]["api_key"]
@@ -44,6 +46,7 @@ class GPTClient:
             return OpenAI(api_key=openai_api_key)
         return OpenAI()
 
+    @lru_cache(maxsize=1000)
     def get_openai_model(self):
         """Get OpenAI model."""
         openai_model = self.config_file["openai"]["model"]
@@ -51,6 +54,7 @@ class GPTClient:
             return openai_model
         return "gpt-4-0125-preview"
 
+    @lru_cache(maxsize=1000)
     def get_openai_model_temperature(self):
         """Get model temperature."""
         openai_temperature = self.config_file["openai"]["temperature"]
@@ -58,6 +62,7 @@ class GPTClient:
             return openai_temperature
         return 0.3
 
+    @lru_cache(maxsize=1000)
     def get_prompt_template(self):
         """Get prompt template."""
         template_path = path.join(path.dirname(__file__), "data")
