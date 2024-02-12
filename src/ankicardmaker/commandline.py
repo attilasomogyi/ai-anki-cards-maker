@@ -11,10 +11,12 @@ class CommandLine:
         self.language = Language()
         self.parser = self.get_parser_args()
 
-    def get_parser_args(self):
-        """Get command line arguments."""
-        parser = ArgumentParser(description="Anki Card Maker")
+    def add_version_argument(self, parser):
+        """Add version argument."""
         parser.add_argument("--version", action="version", version="%(prog)s 0.1")
+
+    def add_deck_name_argument(self, parser):
+        """Add deck name argument."""
         parser.add_argument(
             "-d",
             "--deck",
@@ -24,6 +26,9 @@ class CommandLine:
             nargs=1,
             type=str,
         )
+
+    def add_language_argument(self, parser):
+        """Add language argument."""
         parser.add_argument(
             "-l",
             "--language",
@@ -33,6 +38,9 @@ class CommandLine:
             nargs=1,
             type=str,
         )
+
+    def add_file_argument(self, parser):
+        """Add file argument."""
         parser.add_argument(
             "-f",
             "--file",
@@ -42,6 +50,14 @@ class CommandLine:
             nargs=1,
             type=str,
         )
+
+    def get_parser_args(self):
+        """Get command line arguments."""
+        parser = ArgumentParser(description="Anki Card Maker")
+        self.add_version_argument(parser)
+        self.add_deck_name_argument(parser)
+        self.add_language_argument(parser)
+        self.add_file_argument(parser)
         return parser
 
     def get_parse_args(self):
