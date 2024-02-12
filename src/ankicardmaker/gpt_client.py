@@ -17,6 +17,8 @@ class GPTClient:
         "client",
         "language",
         "prompt_template",
+        "openai_model",
+        "openai_model_temperature",
     )
 
     def __init__(self):
@@ -25,6 +27,8 @@ class GPTClient:
         self.client = self.set_openai_client()
         self.language = Language()
         self.prompt_template = self.get_prompt_template()
+        self.openai_model = self.get_openai_model()
+        self.openai_model_temperature = self.get_openai_model_temperature()
 
     def get_openai_api_key(self):
         """Get API key."""
@@ -81,8 +85,8 @@ class GPTClient:
         prompt = self.check_prompt(prompt)
         try:
             result = self.client.chat.completions.create(
-                model=self.get_openai_model(),
-                temperature=self.get_openai_model_temperature(),
+                model=self.openai_model,
+                temperature=self.openai_model_temperature,
                 response_format={"type": "json_object"},
                 messages=[{"role": "user", "content": prompt}],
             )
