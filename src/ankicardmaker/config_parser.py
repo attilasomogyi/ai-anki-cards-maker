@@ -38,12 +38,7 @@ class ConfigParser:
             case "Linux":
                 return self.home_dir / ".config" / self.config_file_name
             case "Darwin":
-                return (
-                    self.home_dir
-                    / "Library"
-                    / "Application Support"
-                    / self.config_file_name
-                )
+                return self.home_dir / "Library" / "Application Support" / self.config_file_name
             case "Windows":
                 return self.home_dir / "AppData" / "Roaming" / self.config_file_name
             case _:
