@@ -37,7 +37,6 @@ class Worker:
 
     def create_notes(self, deck_name, gpt_response):
         """Create notes."""
-        notes = []
         for card in gpt_response["flashcards"]:
             if "question" not in card or "answer" not in card:
                 raise ValueError("Invalid flashcard.")
@@ -45,10 +44,9 @@ class Worker:
                 note = self.anki.create_note(
                     deck_name, front=card["question"], back=card["answer"]
                 )
-                notes.append(note)
+                yield note
             except ValueError as error:
                 raise ValueError(f"Failed to add note: {error}") from error
-        return notes
 
     def add_notes_to_anki(self, notes):
         """Create notes in Anki."""
