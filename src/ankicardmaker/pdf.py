@@ -6,6 +6,8 @@ import fitz
 class Pdf:
     """Class providing a function to handle the pdf file"""
 
+    __slots__ = ["pdf_file_path", "doc"]
+
     def __init__(self, pdf_file_path):
         self.pdf_file_path = pdf_file_path
         self.doc = self.open_pdf_file(self.pdf_file_path)
