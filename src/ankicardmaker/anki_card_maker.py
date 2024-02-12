@@ -11,6 +11,8 @@ from ankicardmaker.config_parser import ConfigParser
 class AnkiCardMaker:
     """Class providing a function to create Anki cards."""
 
+    __slots__ = ("config_parser", "anki_connect_api_key", "anki_connect_url")
+
     def __init__(self):
         self.config_parser = ConfigParser()
         self.anki_connect_api_key = self.get_anki_connect_api_key()

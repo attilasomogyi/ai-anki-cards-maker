@@ -7,6 +7,8 @@ from os import path
 class Language:
     """Class providing a function to handle languages and their codes."""
 
+    __slots__ = ("languages", "language_dictionary")
+
     def __init__(self):
         self.languages = self.get_languages()
         self.language_dictionary = self.get_language_dictionary()

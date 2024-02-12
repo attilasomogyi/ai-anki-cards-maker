@@ -11,6 +11,14 @@ from ankicardmaker.config_parser import ConfigParser
 class GPTClient:
     """Class providing a function to interact with OpenAI API"""
 
+    __slots__ = (
+        "config_parser",
+        "config_file",
+        "client",
+        "language",
+        "prompt_template",
+    )
+
     def __init__(self):
         self.config_parser = ConfigParser()
         self.config_file = self.config_parser.get_config_file()

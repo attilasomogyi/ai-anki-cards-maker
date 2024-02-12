@@ -7,6 +7,8 @@ from ankicardmaker.languages import Language
 class CommandLine:
     """Class providing a function to handle command line arguments."""
 
+    __slots__ = ("language", "parser")
+
     def __init__(self):
         self.language = Language()
         self.parser = self.get_parser_args()

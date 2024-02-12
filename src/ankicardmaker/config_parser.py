@@ -12,6 +12,8 @@ from jsonschema import validate, Draft202012Validator
 class ConfigParser:
     """Class providing a function to handle the configuration file."""
 
+    __slots__ = ("home_dir", "config_file_name", "json_schema_path", "json_schema")
+
     def __init__(self):
         self.home_dir = Path.home()
         self.config_file_name = "ankicardmaker.toml"
@@ -38,7 +40,12 @@ class ConfigParser:
             case "Linux":
                 return self.home_dir / ".config" / self.config_file_name
             case "Darwin":
-                return self.home_dir / "Library" / "Application Support" / self.config_file_name
+                return (
+                    self.home_dir
+                    / "Library"
+                    / "Application Support"
+                    / self.config_file_name
+                )
             case "Windows":
                 return self.home_dir / "AppData" / "Roaming" / self.config_file_name
             case _:
