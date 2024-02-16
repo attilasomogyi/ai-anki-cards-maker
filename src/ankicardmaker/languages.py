@@ -1,6 +1,6 @@
 """Module for handling languages and their codes."""
 
-from json import load, JSONDecodeError
+from json import load
 from os import path
 
 
@@ -23,13 +23,7 @@ class Language:
         if not path.exists(data_path):
             raise FileNotFoundError(f"{data_path} does not exist.")
         with open(data_path, "r", encoding="utf-8") as language_codes_json_file:
-            try:
-                languages = load(language_codes_json_file)
-            except JSONDecodeError as error:
-                raise ValueError(f"{data_path} is not a valid JSON file.") from error
-            if not languages:
-                raise ValueError(f"{data_path} is empty.")
-        return languages
+            return load(language_codes_json_file)
 
     def get_language_codes(self):
         """Get language codes."""
@@ -37,6 +31,8 @@ class Language:
 
     def get_language_name(self, language_code):
         """Get language name."""
-        if not isinstance(language_code, str):
-            raise TypeError("language_code must be a string.")
-        return self.language_dictionary.get(language_code, None)
+        return (
+            self.language_dictionary.get(language_code)
+            if isinstance(language_code, str)
+            else None
+        )
