@@ -24,45 +24,35 @@ class ConfigParser:
 
     def get_json_schema(self):
         """Get the JSON schema."""
-        if not self.json_schema_path.is_file():
-            raise ValueError(f"{self.json_schema_path} does not exist.")
-        with open(self.json_schema_path, "r", encoding="utf-8") as json_schema_file:
-            try:
+        try:
+            with open(self.json_schema_path, "r", encoding="utf-8") as json_schema_file:
                 return json.load(json_schema_file)
-            except json.JSONDecodeError as error:
-                raise ValueError(
-                    f"{self.json_schema_path} is not a valid JSON file."
-                ) from error
+        except (FileNotFoundError, json.JSONDecodeError) as error:
+            raise ValueError(
+                f"{self.json_schema_path} {'does not exist' if isinstance(error, FileNotFoundError) else 'is not a valid JSON file'}."
+            ) from error
 
     def get_config_file_path(self):
         """Get the configuration file path."""
-        match system():
-            case "Linux":
-                return self.home_dir / ".config" / self.config_file_name
-            case "Darwin":
-                return (
-                    self.home_dir
-                    / "Library"
-                    / "Application Support"
-                    / self.config_file_name
-                )
-            case "Windows":
-                return self.home_dir / "AppData" / "Roaming" / self.config_file_name
-            case _:
-                raise ValueError("Unsupported operating system")
+        paths = {
+            "Linux": [".config"],
+            "Darwin": ["Library", "Application Support"],
+            "Windows": ["AppData", "Roaming"],
+        }
+        system_name = system()
+        if system_name not in paths:
+            raise ValueError("Unsupported operating system")
+        return self.home_dir / Path(*paths[system_name]) / self.config_file_name
 
     def get_config_file(self):
         """Get the configuration file."""
-        config_file_path = self.get_config_file_path()
-        if not config_file_path.is_file():
-            return None
         try:
-            with open(config_file_path, "rb") as config_file:
-                config_file = load(config_file)
-        except IOError as error:
-            raise ValueError(f"Could not read {config_file_path}") from error
-        self.validate_config_file(config_file)
-        return config_file
+            with open(self.get_config_file_path(), "rb") as config_file:
+                return self.validate_config_file(load(config_file))
+        except (IOError, FileNotFoundError) as error:
+            if isinstance(error, FileNotFoundError):
+                return None
+            raise ValueError(f"Could not read {self.get_config_file_path()}") from error
 
     def validate_config_file(self, config_file: dict):
         """Validate the configuration file."""
@@ -73,3 +63,4 @@ class ConfigParser:
             schema=self.json_schema,
             format_checker=Draft202012Validator.FORMAT_CHECKER,
         )
+        return config_file
