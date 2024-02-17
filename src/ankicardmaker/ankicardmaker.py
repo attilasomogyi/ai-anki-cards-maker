@@ -19,6 +19,7 @@ class AnkiCardMaker:
         self.args = self.parser.get_parse_args()
         self.deck_name = self.args.deck_name[0]
         self.language_code = self.args.language_code[0]
+        self.verbose = self.args.verbose
         self.worker = Worker()
 
     def pdf_to_anki_cards(self):
@@ -28,6 +29,8 @@ class AnkiCardMaker:
         ):
             raise ValueError("File must be a PDF.")
         for page in Pdf(self.args.file_path[0]).get_pages_text():
+            if self.verbose:
+                print(f"Processing page: {page}")
             if page:
                 try:
                     Process(
@@ -44,6 +47,8 @@ class AnkiCardMaker:
         try:
             while True:
                 clipboard = str(waitForNewPaste()).rstrip()
+                if self.verbose:
+                    print(f"Processing clipboard: {clipboard}")
                 try:
                     Process(
                         target=self.worker.run,

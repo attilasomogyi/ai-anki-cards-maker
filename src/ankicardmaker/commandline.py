@@ -17,6 +17,17 @@ class CommandLine:
         """Add version argument."""
         parser.add_argument("--version", action="version", version="%(prog)s 0.1")
 
+    def add_verbose_argument(self, parser):
+        """Add verbose argument."""
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            dest="verbose",
+            help="Verbose mode",
+            action="store_true",
+            required=False,
+        )
+
     def add_deck_name_argument(self, parser):
         """Add deck name argument."""
         parser.add_argument(
