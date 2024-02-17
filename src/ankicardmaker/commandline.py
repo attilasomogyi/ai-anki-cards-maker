@@ -68,6 +68,7 @@ class CommandLine:
         """Get command line arguments."""
         parser = ArgumentParser(description="Anki Card Maker")
         self.add_version_argument(parser)
+        self.add_verbose_argument(parser)
         self.add_deck_name_argument(parser)
         self.add_language_argument(parser)
         self.add_file_argument(parser)
