@@ -18,25 +18,26 @@ class AnkiCardMaker:
         self.anki_connect_api_key = self.get_anki_connect_api_key()
         self.anki_connect_url = self.get_anki_connect_url()
 
-    @lru_cache
+    @lru_cache(maxsize=1000)
     def get_anki_connect_api_key(self):
         """Get Anki-Connect API key."""
-        anki_connect_api_key = getenv("ANKI_CONNECT_API_KEY")
-        if anki_connect_api_key is None:
-            config_file = self.config_parser.get_config_file()
-            anki_connect_api_key = config_file["anki_connect"]["api_key"]
-            if anki_connect_api_key is None:
-                raise ValueError("ANKI_CONNECT_API_KEY is not set")
-        return anki_connect_api_key
+        if getenv("ANKI_CONNECT_API_KEY") is not None:
+            return getenv("ANKI_CONNECT_API_KEY")
+        api_key = (
+            self.config_parser.get_config_file().get("anki_connect", {}).get("api_key")
+        )
+        if api_key is not None:
+            return api_key
+        raise ValueError("ANKI_CONNECT_API_KEY is not set")
 
-    @lru_cache
+    @lru_cache(maxsize=1000)
     def get_anki_connect_url(self):
         """Get Anki-Connect URL."""
-        config_file = self.config_parser.get_config_file()
-        anki_connect_url = config_file["anki_connect"]["url"]
-        if anki_connect_url:
-            return anki_connect_url
-        return "http://127.0.0.1:8765"
+        return (
+            self.config_parser.get_config_file()
+            .get("anki_connect", {})
+            .get("url", "http://127.0.0.1:8765")
+        )
 
     def create_request_payload(self, operation, **parameters):
         """Create a request payload."""
@@ -49,27 +50,25 @@ class AnkiCardMaker:
 
     def execute_operation(self, operation, **parameters):
         """Invoke an action."""
-        request_json = dumps(
-            self.create_request_payload(operation, **parameters)
-        ).encode("utf-8")
-        request = Request(self.anki_connect_url, request_json)
+        request = Request(
+            self.anki_connect_url,
+            dumps(self.create_request_payload(operation, **parameters)).encode("utf-8"),
+        )
         with contextlib.closing(urlopen(request)) as response:
             response = load(response)
-            if response["error"] is not None:
+            if response.get("error") is None:
                 raise ValueError(response["error"].capitalize())
 
     def create_note(self, deck_name, front, back, allow_duplicates=False):
         """Create a note."""
-        if not deck_name or not front or not back:
+        if not (deck_name and front and back):
             raise ValueError("deckName, front and back are required")
-        note = {
+        return {
             "note": {
                 "deckName": deck_name,
                 "modelName": "Basic",
                 "fields": {"Front": front, "Back": back},
                 "tags": ["ai-generated"],
+                "options": {"allowDuplicate": allow_duplicates},
             }
         }
-        if allow_duplicates:
-            note["note"]["options"] = {"allowDuplicate": True}
-        return note
