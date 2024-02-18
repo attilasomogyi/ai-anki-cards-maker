@@ -56,7 +56,7 @@ class AnkiCardMaker:
         )
         with contextlib.closing(urlopen(request)) as response:
             response = load(response)
-            if response.get("error") is None:
+            if response["error"] is not None:
                 raise ValueError(response["error"].capitalize())
 
     def create_note(
