@@ -4,7 +4,7 @@ from os import path
 from functools import lru_cache
 from openai import OpenAI
 from json_repair import loads
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 from ankicardmaker.languages import Language
 from ankicardmaker.config_parser import ConfigParser
 
@@ -32,11 +32,11 @@ class GPTClient:
         self.openai_model_temperature = self.get_openai_model_temperature()
 
     @lru_cache(maxsize=1000)
-    def get_openai_api_key(self):
+    def get_openai_api_key(self) -> str | None:
         """Get OpenAI API key."""
         return self.config_file["openai"].get("api_key")
 
-    def set_openai_client(self):
+    def set_openai_client(self) -> OpenAI:
         """Set OpenAI client."""
         return (
             OpenAI(api_key=self.get_openai_api_key())
@@ -45,36 +45,36 @@ class GPTClient:
         )
 
     @lru_cache(maxsize=1000)
-    def get_openai_model(self):
+    def get_openai_model(self) -> str:
         """Get OpenAI model."""
         return self.config_file["openai"].get("model", "gpt-4-0125-preview")
 
     @lru_cache(maxsize=1000)
-    def get_openai_model_temperature(self):
+    def get_openai_model_temperature(self) -> float:
         """Get OpenAI model temperature."""
         return self.config_file["openai"].get("temperature", 0.3)
 
     @lru_cache(maxsize=1000)
-    def get_prompt_template(self):
+    def get_prompt_template(self) -> Template:
         """Get prompt template."""
         return Environment(
             loader=FileSystemLoader(path.join(path.dirname(__file__), "data")),
             autoescape=True,
         ).get_template("prompt.jinja")
 
-    def create_prompt(self, text, language_code):
+    def create_prompt(self, text: str, language_code: str) -> str:
         """Create prompt."""
         return self.prompt_template.render(
             text=text, language_name=self.language.get_language_name(language_code)
         )
 
-    def check_prompt(self, prompt):
+    def check_prompt(self, prompt: str) -> str:
         """Check prompt."""
         if not prompt or not isinstance(prompt, str):
             raise ValueError("Prompt must be a string")
         return prompt
 
-    def create_gpt_request(self, prompt):
+    def create_gpt_request(self, prompt: str) -> str:
         """Create GPT request."""
         prompt = self.check_prompt(prompt)
         try:
@@ -88,9 +88,9 @@ class GPTClient:
             raise RuntimeError("Failed to get response from GPT API") from error
         if not result or not result.choices:
             raise ValueError("No response received from GPT API")
-        return str(result.choices[0].message.content)
+        return result.choices[0].message.content
 
-    def get_gpt_response(self, prompt):
+    def get_gpt_response(self, prompt: str) -> dict:
         """Get GPT response."""
         prompt = self.check_prompt(prompt)
         try:

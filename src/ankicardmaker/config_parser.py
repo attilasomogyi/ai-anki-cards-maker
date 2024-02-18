@@ -22,7 +22,7 @@ class ConfigParser:
         )
         self.json_schema = self.get_json_schema()
 
-    def get_json_schema(self):
+    def get_json_schema(self) -> dict:
         """Get the JSON schema."""
         try:
             with open(self.json_schema_path, "r", encoding="utf-8") as json_schema_file:
@@ -32,7 +32,7 @@ class ConfigParser:
                 f"{self.json_schema_path} {'does not exist' if isinstance(error, FileNotFoundError) else 'is not a valid JSON file'}."
             ) from error
 
-    def get_config_file_path(self):
+    def get_config_file_path(self) -> Path:
         """Get the configuration file path."""
         paths = {
             "Linux": [".config"],
@@ -44,7 +44,7 @@ class ConfigParser:
             raise ValueError("Unsupported operating system")
         return self.home_dir / Path(*paths[system_name]) / self.config_file_name
 
-    def get_config_file(self):
+    def get_config_file(self) -> dict | None:
         """Get the configuration file."""
         try:
             with open(self.get_config_file_path(), "rb") as config_file:
@@ -54,7 +54,7 @@ class ConfigParser:
                 return None
             raise ValueError(f"Could not read {self.get_config_file_path()}") from error
 
-    def validate_config_file(self, config_file: dict):
+    def validate_config_file(self, config_file: dict) -> dict:
         """Validate the configuration file."""
         if not self.json_schema:
             raise ValueError(f"{self.json_schema_path} is empty.")

@@ -1,6 +1,7 @@
 """Worker module for the Anki Card Maker application."""
 
 from functools import lru_cache
+from pprint import pprint
 from ankicardmaker.gpt_client import GPTClient
 from ankicardmaker.anki_card_maker import AnkiCardMaker
 
@@ -8,12 +9,22 @@ from ankicardmaker.anki_card_maker import AnkiCardMaker
 class Worker:
     """Worker class for the Anki Card Maker application."""
 
-    def __init__(self):
+    __slots__ = ("gpt", "anki", "verbose")
+
+    def __init__(self, verbose: bool = False):
         self.gpt = GPTClient()
         self.anki = AnkiCardMaker()
+        self.verbose = verbose
+
+    def print_verbose(self, section: dict):
+        """Print verbose."""
+        if self.verbose:
+            print("GPT response:")
+            pprint(section)
+            print()
 
     @lru_cache(maxsize=1000)
-    def get_cached_gpt_response(self, prompt):
+    def get_cached_gpt_response(self, prompt: str) -> dict:
         """Get a GPT cached response."""
         if not isinstance(prompt, str) or not prompt:
             raise ValueError("Prompt is required")
@@ -25,7 +36,9 @@ class Worker:
             raise ValueError("No flashcards were generated.")
         return gpt_response
 
-    def check_arguments(self, clipboard, deck_name, language_code):
+    def check_arguments(
+        self, clipboard: str, deck_name: str, language_code: str
+    ) -> bool:
         """Check the arguments."""
         if not isinstance(clipboard, str) or not clipboard:
             raise TypeError("Clipboard content must be a non-empty string")
@@ -35,7 +48,7 @@ class Worker:
             raise TypeError("Language code must be a non-empty string")
         return True
 
-    def create_notes(self, deck_name, gpt_response):
+    def create_notes(self, deck_name: str, gpt_response: dict):
         """Create notes."""
         for card in gpt_response["flashcards"]:
             if "question" not in card or "answer" not in card:
@@ -48,7 +61,7 @@ class Worker:
             except ValueError as error:
                 raise ValueError(f"Failed to add note: {error}") from error
 
-    def add_notes_to_anki(self, notes):
+    def add_notes_to_anki(self, notes: list):
         """Create notes in Anki."""
         if isinstance(notes, list) and not notes:
             raise ValueError("No notes to add")
@@ -58,11 +71,12 @@ class Worker:
             except ValueError as error:
                 raise ValueError(f"Failed to add note: {error}") from error
 
-    def run(self, clipboard, deck_name, language_code):
+    def run(self, clipboard: str, deck_name: str, language_code: str):
         """Worker function."""
         self.check_arguments(clipboard, deck_name, language_code)
         prompt = self.gpt.create_prompt(clipboard, language_code)
         gpt_response = self.get_cached_gpt_response(prompt)
+        self.print_verbose(gpt_response)
         try:
             notes = self.create_notes(deck_name, gpt_response)
         except ValueError as error:

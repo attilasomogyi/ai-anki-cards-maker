@@ -39,7 +39,7 @@ class AnkiCardMaker:
             .get("url", "http://127.0.0.1:8765")
         )
 
-    def create_request_payload(self, operation, **parameters):
+    def create_request_payload(self, operation, **parameters) -> dict:
         """Create a request payload."""
         return {
             "action": operation,
@@ -59,7 +59,9 @@ class AnkiCardMaker:
             if response.get("error") is None:
                 raise ValueError(response["error"].capitalize())
 
-    def create_note(self, deck_name, front, back, allow_duplicates=False):
+    def create_note(
+        self, deck_name: str, front: str, back: str, allow_duplicates: bool = False
+    ) -> dict:
         """Create a note."""
         if not (deck_name and front and back):
             raise ValueError("deckName, front and back are required")
