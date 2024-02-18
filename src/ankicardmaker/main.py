@@ -37,8 +37,6 @@ class Main:
         ):
             raise ValueError("File must be a PDF.")
         for page in Pdf(self.args.file_path[0]).get_pages_text():
-            if self.verbose:
-                print(f"Processing page: {page}")
             if page:
                 try:
                     self.print_verbose(page)

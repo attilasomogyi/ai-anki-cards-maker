@@ -26,8 +26,8 @@ class Worker:
     @lru_cache(maxsize=1000)
     def get_cached_gpt_response(self, prompt: str) -> dict:
         """Get a GPT cached response."""
-        if not isinstance(prompt, str) or not prompt:
-            raise ValueError("Prompt is required")
+        if not prompt:
+            raise ValueError("Prompt must be a non-empty string.")
         try:
             gpt_response = self.gpt.get_gpt_response(prompt)
         except ValueError as error:
@@ -40,12 +40,12 @@ class Worker:
         self, clipboard: str, deck_name: str, language_code: str
     ) -> bool:
         """Check the arguments."""
-        if not isinstance(clipboard, str) or not clipboard:
-            raise TypeError("Clipboard content must be a non-empty string")
-        if not isinstance(deck_name, str) or not deck_name:
-            raise TypeError("Deck name must be a non-empty string")
-        if not isinstance(language_code, str) or not language_code:
-            raise TypeError("Language code must be a non-empty string")
+        if not clipboard:
+            raise TypeError("Clipboard content must be a non-empty string.")
+        if not deck_name:
+            raise TypeError("Deck name must be a non-empty string.")
+        if not language_code:
+            raise TypeError("Language code must be a non-empty string.")
         return True
 
     def create_notes(self, deck_name: str, gpt_response: dict):
@@ -63,8 +63,8 @@ class Worker:
 
     def add_notes_to_anki(self, notes: list):
         """Create notes in Anki."""
-        if isinstance(notes, list) and not notes:
-            raise ValueError("No notes to add")
+        if not notes:
+            raise ValueError("No notes to add.")
         for note in notes:
             try:
                 self.anki.execute_operation("addNote", **note)

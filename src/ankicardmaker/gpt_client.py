@@ -70,8 +70,8 @@ class GPTClient:
 
     def check_prompt(self, prompt: str) -> str:
         """Check prompt."""
-        if not prompt or not isinstance(prompt, str):
-            raise ValueError("Prompt must be a string")
+        if not prompt:
+            raise ValueError("Prompt must be a non-empty string.")
         return prompt
 
     def create_gpt_request(self, prompt: str) -> str:
@@ -85,9 +85,9 @@ class GPTClient:
                 messages=[{"role": "user", "content": prompt}],
             )
         except Exception as error:
-            raise RuntimeError("Failed to get response from GPT API") from error
+            raise RuntimeError("Failed to get response from GPT API.") from error
         if not result or not result.choices:
-            raise ValueError("No response received from GPT API")
+            raise ValueError("No response received from GPT API.")
         return result.choices[0].message.content
 
     def get_gpt_response(self, prompt: str) -> dict:
@@ -96,4 +96,4 @@ class GPTClient:
         try:
             return loads(self.create_gpt_request(prompt))
         except Exception as error:
-            raise ValueError("Failed to parse response from GPT API") from error
+            raise ValueError("Failed to parse response from GPT API.") from error

@@ -31,8 +31,4 @@ class Language:
 
     def get_language_name(self, language_code) -> str | None:
         """Get language name."""
-        return (
-            self.language_dictionary.get(language_code)
-            if isinstance(language_code, str)
-            else None
-        )
+        return self.language_dictionary.get(language_code)

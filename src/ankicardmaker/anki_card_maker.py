@@ -64,7 +64,7 @@ class AnkiCardMaker:
     ) -> dict:
         """Create a note."""
         if not (deck_name and front and back):
-            raise ValueError("deckName, front and back are required")
+            raise ValueError("deckName, front and back are required.")
         return {
             "note": {
                 "deckName": deck_name,

@@ -41,7 +41,7 @@ class ConfigParser:
         }
         system_name = system()
         if system_name not in paths:
-            raise ValueError("Unsupported operating system")
+            raise ValueError("Unsupported operating system.")
         return self.home_dir / Path(*paths[system_name]) / self.config_file_name
 
     def get_config_file(self) -> dict | None:
