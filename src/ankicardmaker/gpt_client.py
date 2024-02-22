@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Copyright 2023-2024 Attila Zsolt Somogyi
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """GPTClient class to interact with OpenAI API"""
 
 from os import path
