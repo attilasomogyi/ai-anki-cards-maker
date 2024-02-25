@@ -26,7 +26,7 @@ class Worker:
             pprint(section)
             print()
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_cached_gpt_response(self, prompt: str) -> dict:
         """Get a GPT cached response."""
         if not prompt:

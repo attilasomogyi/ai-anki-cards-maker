@@ -34,7 +34,7 @@ class GPTClient:
         self.openai_model = self.get_openai_model()
         self.openai_model_temperature = self.get_openai_model_temperature()
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_openai_api_key(self) -> str | None:
         """Get OpenAI API key."""
         return self.config_file["openai"].get("api_key")
@@ -47,17 +47,17 @@ class GPTClient:
             else OpenAI()
         )
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_openai_model(self) -> str:
         """Get OpenAI model."""
         return self.config_file["openai"].get("model", "gpt-4-0125-preview")
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_openai_model_temperature(self) -> float:
         """Get OpenAI model temperature."""
         return self.config_file["openai"].get("temperature", 0.3)
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_prompt_template(self) -> Template:
         """Get prompt template."""
         return Environment(

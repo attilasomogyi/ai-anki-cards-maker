@@ -21,7 +21,7 @@ class AnkiCardMaker:
         self.anki_connect_api_key = self.get_anki_connect_api_key()
         self.anki_connect_url = self.get_anki_connect_url()
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_anki_connect_api_key(self):
         """Get Anki-Connect API key."""
         if getenv("ANKI_CONNECT_API_KEY") is not None:
@@ -33,7 +33,7 @@ class AnkiCardMaker:
             return api_key
         raise ValueError("ANKI_CONNECT_API_KEY is not set")
 
-    @lru_cache(maxsize=1000)
+    @lru_cache(maxsize=1)
     def get_anki_connect_url(self):
         """Get Anki-Connect URL."""
         return (
