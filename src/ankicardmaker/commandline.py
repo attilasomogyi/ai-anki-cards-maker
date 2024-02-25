@@ -79,4 +79,6 @@ class CommandLine:
 
     def get_parse_args(self) -> ArgumentParser:
         """Parse command line arguments."""
-        return self.parser.parse_args()
+        parse = self.parser.parse_args()
+        parse.language_code = parse.language_code or "en"
+        return parse
