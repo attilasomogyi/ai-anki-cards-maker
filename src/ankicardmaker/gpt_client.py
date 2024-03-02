@@ -6,6 +6,7 @@
 from os import path
 from functools import lru_cache
 from openai import OpenAI
+from openai import base_url
 from json_repair import loads
 from jinja2 import Environment, FileSystemLoader, Template
 from ankicardmaker.languages import Language
@@ -16,23 +17,28 @@ class GPTClient:
     """Class providing a function to interact with OpenAI API"""
 
     __slots__ = (
-        "config_parser",
         "config_file",
         "client",
         "language",
         "prompt_template",
         "openai_model",
         "openai_model_temperature",
+        "base_url",
     )
 
     def __init__(self):
-        self.config_parser = ConfigParser()
-        self.config_file = self.config_parser.get_config_file()
+        self.config_file = ConfigParser().get_config_file()
+        self.base_url = self.get_base_url()
         self.client = self.set_openai_client()
         self.language = Language()
         self.prompt_template = self.get_prompt_template()
         self.openai_model = self.get_openai_model()
         self.openai_model_temperature = self.get_openai_model_temperature()
+
+    @lru_cache(maxsize=1)
+    def get_base_url(self) -> str:
+        """Get base URL."""
+        return self.config_file["openai"].get("base_url", base_url)
 
     @lru_cache(maxsize=1)
     def get_openai_api_key(self) -> str | None:
@@ -42,9 +48,9 @@ class GPTClient:
     def set_openai_client(self) -> OpenAI:
         """Set OpenAI client."""
         return (
-            OpenAI(api_key=self.get_openai_api_key())
+            OpenAI(api_key=self.get_openai_api_key(), base_url=self.base_url)
             if self.get_openai_api_key()
-            else OpenAI()
+            else OpenAI(base_url=self.base_url)
         )
 
     @lru_cache(maxsize=1)
