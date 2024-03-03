@@ -9,17 +9,19 @@ from urllib.request import urlopen, Request
 from os import getenv
 from functools import lru_cache
 from ankicardmaker.config_parser import ConfigParser
+from ankicardmaker.dataclass.anki_connect import AnkiConnect
 
 
 class AnkiCardMaker:
     """Class providing a function to create Anki cards."""
 
-    __slots__ = ("config_parser", "anki_connect_api_key", "anki_connect_url")
+    __slots__ = ("config_parser", "anki_connect")
 
     def __init__(self):
         self.config_parser = ConfigParser()
-        self.anki_connect_api_key = self.get_anki_connect_api_key()
-        self.anki_connect_url = self.get_anki_connect_url()
+        self.anki_connect = AnkiConnect(
+            api_key=self.get_anki_connect_api_key(), url=self.get_anki_connect_url()
+        )
 
     @lru_cache(maxsize=1)
     def get_anki_connect_api_key(self):
@@ -48,13 +50,13 @@ class AnkiCardMaker:
             "action": operation,
             "params": parameters,
             "version": 6,
-            "key": self.anki_connect_api_key,
+            "key": self.anki_connect.api_key,
         }
 
     def execute_operation(self, operation, **parameters):
         """Invoke an action."""
         request = Request(
-            self.anki_connect_url,
+            self.anki_connect.url,
             dumps(self.create_request_payload(operation, **parameters)).encode("utf-8"),
         )
         with contextlib.closing(urlopen(request)) as response:
@@ -62,9 +64,7 @@ class AnkiCardMaker:
             if response["error"] is not None:
                 raise ValueError(response["error"].capitalize())
 
-    def create_note(
-        self, deck_name: str, front: str, back: str, allow_duplicates: bool = False
-    ) -> dict:
+    def create_note(self, deck_name: str, front: str, back: str) -> dict:
         """Create a note."""
         if not (deck_name and front and back):
             raise ValueError("deckName, front and back are required.")
@@ -74,6 +74,6 @@ class AnkiCardMaker:
                 "modelName": "Basic",
                 "fields": {"Front": front, "Back": back},
                 "tags": ["ai-generated"],
-                "options": {"allowDuplicate": allow_duplicates},
+                "options": {"allowDuplicate": False},
             }
         }

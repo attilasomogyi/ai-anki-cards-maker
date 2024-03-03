@@ -20,8 +20,7 @@ class Main:
 
     def __init__(self):
         """Initialize the AnkiCardMaker class."""
-        self.parser = CommandLine()
-        self.args = self.parser.get_parse_args()
+        self.args = CommandLine().get_parse_args()
         self.deck_name = self.args.deck_name[0]
         self.language_code = self.args.language_code[0]
         self.verbose = self.args.verbose

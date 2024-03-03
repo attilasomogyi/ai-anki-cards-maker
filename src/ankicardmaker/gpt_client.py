@@ -9,6 +9,7 @@ from openai import OpenAI
 from openai import base_url
 from json_repair import loads
 from jinja2 import Environment, FileSystemLoader, Template
+from ankicardmaker.dataclass.openai_client import OpenAIClient
 from ankicardmaker.languages import Language
 from ankicardmaker.config_parser import ConfigParser
 
@@ -18,22 +19,20 @@ class GPTClient:
 
     __slots__ = (
         "config_file",
-        "client",
         "language",
         "prompt_template",
-        "openai_model",
-        "openai_model_temperature",
-        "base_url",
+        "openai",
     )
 
     def __init__(self):
         self.config_file = ConfigParser().get_config_file()
-        self.base_url = self.get_base_url()
-        self.client = self.set_openai_client()
+        self.openai = OpenAIClient(
+            client=self.set_openai_client(),
+            model=self.get_openai_model(),
+            model_temperature=self.get_openai_model_temperature(),
+        )
         self.language = Language()
         self.prompt_template = self.get_prompt_template()
-        self.openai_model = self.get_openai_model()
-        self.openai_model_temperature = self.get_openai_model_temperature()
 
     @lru_cache(maxsize=1)
     def get_base_url(self) -> str:
@@ -48,9 +47,9 @@ class GPTClient:
     def set_openai_client(self) -> OpenAI:
         """Set OpenAI client."""
         return (
-            OpenAI(api_key=self.get_openai_api_key(), base_url=self.base_url)
+            OpenAI(api_key=self.get_openai_api_key(), base_url=self.get_base_url())
             if self.get_openai_api_key()
-            else OpenAI(base_url=self.base_url)
+            else OpenAI(base_url=self.get_base_url())
         )
 
     @lru_cache(maxsize=1)
@@ -87,9 +86,10 @@ class GPTClient:
         """Create GPT request."""
         prompt = self.check_prompt(prompt)
         try:
-            result = self.client.chat.completions.create(
-                model=self.openai_model,
-                temperature=self.openai_model_temperature,
+            # pylint: disable=no-member
+            result = self.openai.client.chat.completions.create(
+                model=self.openai.model,
+                temperature=self.openai.model_temperature,
                 response_format={"type": "json_object"},
                 messages=[{"role": "user", "content": prompt}],
             )
