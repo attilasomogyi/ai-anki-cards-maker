@@ -13,54 +13,62 @@ from ankicardmaker.worker import Worker
 from ankicardmaker.pdf import Pdf
 
 
+# pylint: disable=too-few-public-methods
 class Main:
     """Anki Card Maker main class."""
 
-    __slots__ = ("parser", "args", "deck_name", "language_code", "verbose", "worker")
+    __slots__ = (
+        "__parser",
+        "__args",
+        "__deck_name",
+        "__language_code",
+        "__verbose",
+        "__worker",
+    )
 
     def __init__(self):
         """Initialize the AnkiCardMaker class."""
-        self.args = CommandLine().get_parse_args()
-        self.deck_name = self.args.deck_name[0]
-        self.language_code = self.args.language_code[0]
-        self.verbose = self.args.verbose
-        self.worker = Worker(self.verbose)
+        self.__args = CommandLine().get_parse_args()
+        self.__deck_name = self.__args.deck_name[0]
+        self.__language_code = self.__args.language_code[0]
+        self.__verbose = self.__args.verbose
+        self.__worker = Worker(self.__verbose)
 
-    def print_verbose(self, section: str):
+    def __print_verbose(self, section: str):
         """Print verbose."""
-        if self.verbose:
-            print(f"Deck name: {self.deck_name}")
+        if self.__verbose:
+            print(f"Deck name: {self.__deck_name}")
             print(f"Processing section:\n{section}\n")
 
-    def pdf_to_anki_cards(self):
+    def __pdf_to_anki_cards(self):
         """Convert PDF to Anki cards."""
-        if not (self.args.file_path) or (
-            guess_type(self.args.file_path[0])[0] != "application/pdf"
+        if not (self.__args.file_path) or (
+            guess_type(self.__args.file_path[0])[0] != "application/pdf"
         ):
             raise ValueError("File must be a PDF.")
-        for page in Pdf(self.args.file_path[0]).get_pages_text():
+        for page in Pdf(self.__args.file_path[0]).get_pages_text():
             if page:
                 try:
-                    self.print_verbose(page)
+                    self.__print_verbose(page)
                     Process(
-                        target=self.worker.run,
-                        args=(page, self.deck_name, self.language_code),
+                        target=self.__worker.run,
+                        args=(page, self.__deck_name, self.__language_code),
                     ).start()
                     rate_limit_per_minute = 3
                     sleep(60.0 / rate_limit_per_minute)
                 except ValueError as error:
                     print(f"An error occurred: {error}")
 
-    def clipboard_to_anki_cards(self):
+    def __clipboard_to_anki_cards(self):
         """Convert clipboard to Anki cards."""
         try:
             while True:
                 clipboard = str(waitForNewPaste()).rstrip()
-                self.print_verbose(clipboard)
+                self.__print_verbose(clipboard)
                 try:
                     Process(
-                        target=self.worker.run,
-                        args=(clipboard, self.deck_name, self.language_code),
+                        target=self.__worker.run,
+                        args=(clipboard, self.__deck_name, self.__language_code),
                     ).start()
                 except ValueError as error:
                     print(f"An error occurred: {error}")
@@ -70,10 +78,10 @@ class Main:
 
     def run(self):
         """Run the Anki Card Maker."""
-        if self.args.file_path:
-            self.pdf_to_anki_cards()
+        if self.__args.file_path:
+            self.__pdf_to_anki_cards()
         else:
-            self.clipboard_to_anki_cards()
+            self.__clipboard_to_anki_cards()
 
 
 def main():

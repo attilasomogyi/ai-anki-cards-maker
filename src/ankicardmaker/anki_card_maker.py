@@ -15,49 +15,53 @@ from ankicardmaker.dataclass.anki_connect import AnkiConnect
 class AnkiCardMaker:
     """Class providing a function to create Anki cards."""
 
-    __slots__ = ("config_parser", "anki_connect")
+    __slots__ = ("__config_parser", "__anki_connect")
 
     def __init__(self):
-        self.config_parser = ConfigParser()
-        self.anki_connect = AnkiConnect(
-            api_key=self.get_anki_connect_api_key(), url=self.get_anki_connect_url()
+        self.__config_parser = ConfigParser()
+        self.__anki_connect = AnkiConnect(
+            api_key=self.__get_anki_connect_api_key(), url=self.__get_anki_connect_url()
         )
 
     @lru_cache(maxsize=1)
-    def get_anki_connect_api_key(self):
+    def __get_anki_connect_api_key(self):
         """Get Anki-Connect API key."""
         if getenv("ANKI_CONNECT_API_KEY") is not None:
             return getenv("ANKI_CONNECT_API_KEY")
         api_key = (
-            self.config_parser.get_config_file().get("anki_connect", {}).get("api_key")
+            self.__config_parser.get_config_file()
+            .get("anki_connect", {})
+            .get("api_key")
         )
         if api_key is not None:
             return api_key
         raise ValueError("ANKI_CONNECT_API_KEY is not set")
 
     @lru_cache(maxsize=1)
-    def get_anki_connect_url(self):
+    def __get_anki_connect_url(self):
         """Get Anki-Connect URL."""
         return (
-            self.config_parser.get_config_file()
+            self.__config_parser.get_config_file()
             .get("anki_connect", {})
             .get("url", "http://127.0.0.1:8765")
         )
 
-    def create_request_payload(self, operation, **parameters) -> dict:
+    def __create_request_payload(self, operation, **parameters) -> dict:
         """Create a request payload."""
         return {
             "action": operation,
             "params": parameters,
             "version": 6,
-            "key": self.anki_connect.api_key,
+            "key": self.__anki_connect.api_key,
         }
 
     def execute_operation(self, operation, **parameters):
         """Invoke an action."""
         request = Request(
-            self.anki_connect.url,
-            dumps(self.create_request_payload(operation, **parameters)).encode("utf-8"),
+            self.__anki_connect.url,
+            dumps(self.__create_request_payload(operation, **parameters)).encode(
+                "utf-8"
+            ),
         )
         with contextlib.closing(urlopen(request)) as response:
             response = load(response)

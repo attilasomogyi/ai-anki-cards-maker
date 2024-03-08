@@ -7,23 +7,24 @@ from pathlib import Path
 import fitz
 
 
+# pylint: disable=too-few-public-methods
 class Pdf:
     """Class providing a function to handle the pdf file"""
 
-    __slots__ = ("pdf_file_path", "doc")
+    __slots__ = ("__pdf_file_path", "__doc")
 
     def __init__(self, pdf_file_path: Path):
-        self.pdf_file_path = pdf_file_path
-        self.doc = self.open_pdf_file(self.pdf_file_path)
+        self.__pdf_file_path = pdf_file_path
+        self.__doc = self.__open_pdf_file()
 
-    def open_pdf_file(self, pdf_file_path: Path) -> fitz.Document:
+    def __open_pdf_file(self) -> fitz.Document:
         """Open the pdf file"""
-        return fitz.open(pdf_file_path)
+        return fitz.open(self.__pdf_file_path)
 
     def get_pages_text(self) -> list[str]:
         """Get the text of the pages"""
         pages = []
-        for page in self.doc:
+        for page in self.__doc:
             text = page.get_text("text")
             if text:
                 text = text.replace("\n", " ").replace(r"\s{2,}", " ")
