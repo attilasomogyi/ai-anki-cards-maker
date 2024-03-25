@@ -6,7 +6,6 @@
 from os import path
 from functools import lru_cache
 from openai import OpenAI
-from openai import base_url
 from json_repair import loads
 from jinja2 import Environment, FileSystemLoader, Template
 from ankicardmaker.dataclass.openai_client import OpenAIClient
@@ -35,9 +34,9 @@ class GPTClient:
         self.__prompt_template = self.__get_prompt_template()
 
     @lru_cache(maxsize=1)
-    def __get_base_url(self) -> str:
+    def __get_base_url(self) -> str | None:
         """Get base URL."""
-        return self.__config_file["openai"].get("base_url", base_url)
+        return self.__config_file["openai"].get("base_url", None)
 
     @lru_cache(maxsize=1)
     def __get_openai_api_key(self) -> str | None:

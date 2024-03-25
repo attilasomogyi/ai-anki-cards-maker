@@ -67,6 +67,7 @@ class AnkiCardMaker:
             response = load(response)
             if response["error"] is not None:
                 raise ValueError(response["error"].capitalize())
+            return response["result"]
 
     def create_note(self, deck_name: str, front: str, back: str) -> dict:
         """Create a note."""
