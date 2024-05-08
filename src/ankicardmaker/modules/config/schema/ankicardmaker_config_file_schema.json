@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/attilasomogyi/ankicardmaker/main/src/ankicardmaker/data/ankicardmaker_config_file_schema.json",
+  "$id": "https://raw.githubusercontent.com/attilasomogyi/ankicardmaker/main/src/ankicardmaker/modules/config/schema/ankicardmaker_config_file_schema.json",
   "title": "Anki card maker config file schema",
   "type": "object",
   "unevaluatedProperties": false,

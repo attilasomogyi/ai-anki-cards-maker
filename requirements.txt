@@ -8,3 +8,5 @@ mypy
 pyright
 ruff
 jsonschema
+mutmut
+pytest-cov
