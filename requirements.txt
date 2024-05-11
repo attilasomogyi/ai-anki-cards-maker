@@ -10,3 +10,4 @@ ruff
 jsonschema
 mutmut
 pytest-cov
+rich

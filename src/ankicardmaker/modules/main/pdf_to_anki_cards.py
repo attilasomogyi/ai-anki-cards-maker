@@ -6,6 +6,7 @@
 from mimetypes import guess_type
 from multiprocessing import Process
 from time import sleep
+from rich.progress import track
 from ankicardmaker.modules.main.verbose import MainVerbose
 from ankicardmaker.modules.pdf.pages_text import PdfPagesText
 from ankicardmaker.modules.worker.run import WorkerRun
@@ -22,7 +23,7 @@ class MainPdfToAnkiCards:
         """Convert PDF to Anki cards."""
         if not (file_path) or (guess_type(file_path[0])[0] != "application/pdf"):
             raise ValueError("File must be a PDF.")
-        for page in PdfPagesText.get(file_path[0]):
+        for page in track(PdfPagesText.get(file_path[0]), description="Processing PDF"):
             if page:
                 try:
                     if verbose:
