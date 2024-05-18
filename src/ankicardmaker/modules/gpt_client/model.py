@@ -17,5 +17,5 @@ class GPTClientModel:
         """Get OpenAI model."""
         config = ConfigFile().get()
         if config is not None and "openai" in config:
-            return config["openai"].get("model", "gpt-4-0125-preview")
-        return "gpt-4-0125-preview"
+            return config["openai"].get("model", "gpt-4o")
+        return "gpt-4o"
