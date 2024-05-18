@@ -11,6 +11,7 @@ dependencies = [
     "jsonschema",
     "jsonschema[format]",
     "rich",
+    "python-pptx",
 ]
 requires-python = ">= 3.11"
 readme = "README.md"

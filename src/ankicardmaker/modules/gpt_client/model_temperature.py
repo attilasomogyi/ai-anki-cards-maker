@@ -17,5 +17,5 @@ class GPTClientModelTemperature:
         """Get OpenAI temperature."""
         config = ConfigFile().get()
         if config is not None and "openai" in config:
-            return config["openai"].get("temperature", 0.3)
-        return 0.3
+            return config["openai"].get("temperature", 0.7)
+        return 0.7

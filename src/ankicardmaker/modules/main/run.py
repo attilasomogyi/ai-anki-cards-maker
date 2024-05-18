@@ -3,9 +3,10 @@
 
 """Module for running the Anki Card Maker."""
 
+from pathlib import Path
 from ankicardmaker.modules.command_line.parser_args import CommandLineParserArgs
 from ankicardmaker.modules.main.clipboard_to_anki_cards import MainClipboardToAnkiCards
-from ankicardmaker.modules.main.pdf_to_anki_cards import MainPdfToAnkiCards
+from ankicardmaker.modules.main.file_to_anki_cards import MainFileToAnkiCards
 
 
 # pylint: disable=too-few-public-methods
@@ -16,8 +17,8 @@ class MainRun:
         """Run the Anki Card Maker."""
         args = CommandLineParserArgs.parse()
         if args.file_path:
-            MainPdfToAnkiCards.convert(
-                args.file_path,
+            MainFileToAnkiCards.convert(
+                Path(args.file_path[0]),
                 args.deck_name[0],
                 args.language_code[0],
                 args.verbose,

@@ -11,3 +11,4 @@ jsonschema
 mutmut
 pytest-cov
 rich
+python-pptx
